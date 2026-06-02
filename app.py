@@ -53,13 +53,14 @@ with col2:
 # Prepare input data
 input_data = train_df.drop("SalePrice", axis=1).copy()
 
-# Fill missing values
+# Fill missing values safely
 for col in input_data.columns:
     if input_data[col].dtype == "object":
         input_data[col] = input_data[col].fillna(input_data[col].mode()[0])
     else:
+        input_data[col] = pd.to_numeric(input_data[col], errors="coerce")
         input_data[col] = input_data[col].fillna(input_data[col].median())
-
+        
 # Take one default row
 single_row = input_data.iloc[[0]].copy()
 
